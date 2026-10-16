@@ -1,0 +1,1 @@
+ECLIPSE titanium smartwatch concept: interactive 3D product page built with Next.js, Three.js and GSAP

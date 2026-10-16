@@ -1,0 +1,154 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens. Tailwind v4 turns each of these into utility classes:
+ *   --color-accent → bg-accent, text-accent, border-accent…
+ *   --breakpoint-desktop → the `desktop:` prefix (861px and up)
+ * They are the same values as the original index.html :root variables.
+ */
+@theme {
+  --color-bg: #06070a;
+  --color-bg-2: #0c0e14;
+  --color-panel: #111420;
+  --color-ink: #eef1f7;
+  --color-muted: #8b93a7;
+  --color-line: rgb(255 255 255 / 0.08);
+  --color-accent: #00e0c6;
+  --color-accent-2: #6a7bff;
+
+  /* Single breakpoint, same as before: below 861px = mobile layout */
+  --breakpoint-desktop: 53.8125rem;
+
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+html {
+  background: var(--color-bg);
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: var(--color-bg);
+}
+
+/*
+ * Small reusable classes. Kept as plain CSS (rather than long Tailwind class
+ * lists repeated in every section) so the JSX stays easy to read.
+ */
+@layer components {
+  /* Every page section: at least one screen tall (the 3D scroll timing relies on this).
+     Mobile: the top ~half of the screen is reserved for the watch (padding-top),
+     and the content sits below it. Desktop: content is centered beside the watch. */
+  .section {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: flex-end;
+    min-height: 100svh;
+    max-width: 1180px;
+    margin-inline: auto;
+    padding: 48svh 22px 64px;
+  }
+  @media (min-width: 861px) {
+    .section {
+      align-items: center;
+      padding: 120px 32px;
+    }
+  }
+
+  /* Tall sections on desktop (Design, Health): extra scroll room for a 3D sequence
+     (exploded view, turn to the screen).
+     The section is 2.2 screens tall and its content sticks in place (see
+     Design.tsx), so the text stays readable while scrolling drives the 3D. */
+  @media (min-width: 861px) {
+    .section-tall {
+      min-height: 220svh;
+      align-items: flex-start;
+      padding-block: 0;
+    }
+  }
+
+  /* Static watch image for devices that can't run the 3D (SceneLoader adds
+     .no-3d to <html>). The radial mask fades its edges into the background. */
+  .watch-poster {
+    display: none;
+    mask-image: radial-gradient(closest-side, #000 72%, transparent);
+  }
+  .no-3d .watch-poster {
+    display: block;
+  }
+
+  .eyebrow {
+    margin-bottom: 18px;
+    font-size: 12px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+
+  .heading {
+    font-size: clamp(30px, 5vw, 52px);
+    font-weight: 700;
+    line-height: 1.04;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+
+  .lead {
+    max-width: 560px;
+    color: var(--color-muted);
+    font-size: clamp(15px, 2vw, 18px);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 28px;
+    border-radius: 40px;
+    background: linear-gradient(90deg, var(--color-accent), var(--color-accent-2));
+    color: var(--color-bg);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    box-shadow: 0 10px 40px -12px var(--color-accent);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 48px -12px var(--color-accent);
+  }
+
+  .btn-outline {
+    padding: 9px 18px;
+    border: 1px solid var(--color-accent);
+    border-radius: 40px;
+    color: var(--color-accent);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: background 0.25s, color 0.25s;
+  }
+  .btn-outline:hover {
+    background: var(--color-accent);
+    color: var(--color-bg);
+  }
+
+  /* Frosted-glass card: lets the 3D watch show through, blurred, behind text */
+  .glass {
+    border: 1px solid var(--color-line);
+    border-radius: 20px;
+    background: rgb(17 20 32 / 0.7);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+}
