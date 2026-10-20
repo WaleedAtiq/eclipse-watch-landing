@@ -7,3 +7,7 @@ next-env.d.ts
 .vercel
 QA
 .claude/
+
+# Local AI-assistant notes and settings (kept on this machine, not in the repo)
+CLAUDE.md
+.claude/
